@@ -22,15 +22,16 @@ const UserChatComponent = () => {
     } else {
       // socket.emit('message', 'message from client')
       if (currentMessage !== '') {
-        const messageData = {
-          author: 'PV',
-          receiver: 'receiver',
-          message: currentMessage,
-          time:
-            new Date(Date.now()).getHours() +
-            ':' +
-            new Date(Date.now()).getMinutes(),
-        }
+        const messageData = currentMessage
+        // const messageData = {
+        //   author: 'PV',
+        //   receiver: 'receiver',
+        //   message: currentMessage,
+        //   time:
+        //     new Date(Date.now()).getHours() +
+        //     ':' +
+        //     new Date(Date.now()).getMinutes(),
+        // }
 
         socket.emit('sendMessage', messageData)
         setMessageList((list) => [...list, messageData])

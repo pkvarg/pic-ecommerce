@@ -13,5 +13,9 @@ const io = new Server(8990, {
 io.on('connection', (socket) => {
   socket.on('sendMessage', (msg) => {
     console.log(msg)
+    socket.broadcast.emit('server to admin', {
+      message: msg,
+    })
+    console.log('send:', msg)
   })
 })
