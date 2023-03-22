@@ -1,4 +1,5 @@
-import { legacy_createStore, combineReducers, applyMiddleware } from 'redux'
+import { combineReducers, applyMiddleware } from 'redux'
+import { configureStore } from '@reduxjs/toolkit'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import thunk from 'redux-thunk'
 
@@ -8,13 +9,13 @@ const reducer = combineReducers({
   adminChat: adminChatReducer,
 })
 
-const INITIAL_STATE = {}
+const preloadedState = {}
 
 const middleware = [thunk]
-const store = legacy_createStore(
+const store = configureStore({
   reducer,
-  INITIAL_STATE,
-  composeWithDevTools(applyMiddleware(...middleware))
-)
+  preloadedState,
+  middleware,
+})
 
 export default store
