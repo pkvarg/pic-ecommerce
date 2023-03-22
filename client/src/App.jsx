@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import './App.css'
+import HeaderComponent from './components/HeaderComponent'
 
 import UserChatComponent from './components/UserChatComponent'
 import Admin from './pages/admin'
@@ -16,6 +17,7 @@ function App() {
             <Route path='/admin' element={<Admin />} />
           </Routes>
 
+          <HeaderComponent />
           <UserChatComponent />
         </Router>
       </div>

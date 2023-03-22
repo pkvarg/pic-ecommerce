@@ -3,41 +3,44 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCommentDots } from '@fortawesome/free-solid-svg-icons'
 import { faCircleXmark } from '@fortawesome/free-solid-svg-icons'
 import { socket } from './../../socket'
-import ScrollToBottom from 'react-scroll-to-bottom'
 
 const UserChatComponent = () => {
-  const [currentMessage, setCurrentMessage] = useState('')
-  const [messageList, setMessageList] = useState([])
-
-  //const [socket, setSocket] = useState(false)
-  // useEffect(() => {
-  //   const socket = socketIOClient()
-  //   setSocket(socket)
-  //   return () => socket.disconnect()
-  // }, [])
+  //const [skt, setSkt] = useState(false)
+  const [chat, setChat] = useState([])
+  useEffect(() => {
+    // if (!userInfo.isAdmin) {
+    // const sct = socket
+    //setSkt(sct)
+    socket.on('server sends message from admin to client', (msg) => {
+      setChat((chat) => {
+        return [...chat, { admin: msg }]
+      })
+      const chatMessages = document.querySelector('.cht-msg')
+      chatMessages.scrollTop = chatMessages.scrollHeight
+    })
+    //return () => sct.disconnect()
+    //}
+  }, [])
 
   const clientSubmitChatMsg = (e) => {
     if (e.keyCode && e.keyCode !== 13) {
       return
-    } else {
-      // socket.emit('message', 'message from client')
-      if (currentMessage !== '') {
-        const messageData = currentMessage
-        // const messageData = {
-        //   author: 'PV',
-        //   receiver: 'receiver',
-        //   message: currentMessage,
-        //   time:
-        //     new Date(Date.now()).getHours() +
-        //     ':' +
-        //     new Date(Date.now()).getMinutes(),
-        // }
-
-        socket.emit('sendMessage', messageData)
-        setMessageList((list) => [...list, messageData])
-        setCurrentMessage('')
-      }
     }
+    const msg = document.getElementById('clientChatMsg')
+    let v = msg.value.trim()
+    if (v === '' || v === null || v === false || !v) {
+      return
+    }
+    socket.emit('client sends message', v)
+    setChat((chat) => {
+      return [...chat, { client: v }]
+    })
+    msg.focus()
+    setTimeout(() => {
+      msg.value = ''
+      const chatMessages = document.querySelector('.cht-msg')
+      chatMessages.scrollTop = chatMessages.scrollHeight
+    }, 200)
   }
 
   return (
@@ -55,69 +58,35 @@ const UserChatComponent = () => {
           <h6>Let's Chat - Online</h6>
         </div>
         <div className='chat-form'>
-          <div className='chat-msg'>
-            {/* {Array.from({ length: 20 }).map((_, id) => (
+          <div className='cht-msg'>
+            {chat.map((item, id) => (
               <div key={id}>
-                <p>
-                  <b>You wrote:</b>Hello world! This is a toast message.
-                </p>
-                <p className='bg-[#046FF6] rounded'>
-                  <b>Support wrote:</b>Hello world! This is a toast message.
-                </p>
+                {item.client && (
+                  <p>
+                    <b>You wrote:</b> {item.client}
+                  </p>
+                )}
+                {item.admin && (
+                  <p className='bg-primary p-3 ms-4 text-light rounded-pill'>
+                    <b>Support wrote:</b> {item.admin}
+                  </p>
+                )}
               </div>
-            ))} */}
-            <ScrollToBottom>
-              {messageList.map((messageContent, i) => (
-                <div
-                  key={i}
-                  className='message'
-                  //id={username === messageContent.author ? 'you' : 'other'}
-                >
-                  <div>
-                    <div className='message-content'>
-                      <p>{messageContent.message}</p>
-                    </div>
-                    <div className='message-meta'>
-                      <p id='time'>{messageContent.time}</p>
-                      <p id='author'>{messageContent.author}</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </ScrollToBottom>
+            ))}
           </div>
-          <div className='flex flex-col mt-3'>
-            {/* <textarea
-              onKeyUp={(e) => clientSubmitChatMsg(e)}
-              id='clientChatMsg'
-              className='form-control'
-              placeholder='Your Text Message'
-            ></textarea>
+          <textarea
+            onKeyUp={(e) => clientSubmitChatMsg(e)}
+            id='clientChatMsg'
+            className='form-control'
+            placeholder='Your Text Message'
+          ></textarea>
 
-            <button
-              onClick={(e) => clientSubmitChatMsg(e)}
-              className='btn bg-[#16a34a] p-[10px] rounded-xl'
-            >
-              Submit
-            </button> */}
-            <input
-              type='text'
-              value={currentMessage}
-              placeholder='Ahoj...'
-              onChange={(event) => {
-                setCurrentMessage(event.target.value)
-              }}
-              onKeyDown={(event) => {
-                event.key === 'Enter' && clientSubmitChatMsg()
-              }}
-            />
-            <button
-              onClick={(e) => clientSubmitChatMsg(e)}
-              className='btn bg-[#16a34a] p-[10px] rounded-xl'
-            >
-              Send
-            </button>
-          </div>
+          <button
+            onClick={(e) => clientSubmitChatMsg(e)}
+            className='btn btn-success btn-block'
+          >
+            Submit
+          </button>
         </div>
       </div>
     </>

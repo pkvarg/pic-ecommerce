@@ -11,11 +11,15 @@ const io = new Server(8990, {
 })
 
 io.on('connection', (socket) => {
-  socket.on('sendMessage', (msg) => {
-    console.log(msg)
-    socket.broadcast.emit('server to admin', {
+  socket.on('client sends message', (msg) => {
+    socket.broadcast.emit('server sends message from client to admin', {
       message: msg,
     })
-    console.log('send:', msg)
+    console.log('cl:', msg)
+  })
+
+  socket.on('admin sends message', ({ message }) => {
+    console.log('asm:', message)
+    socket.broadcast.emit('server sends message from admin to client', message)
   })
 })
