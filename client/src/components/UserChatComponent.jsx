@@ -5,16 +5,17 @@ import { faCircleXmark } from '@fortawesome/free-solid-svg-icons'
 import { socket } from './../../socket'
 
 const UserChatComponent = () => {
-  //const [skt, setSkt] = useState(false)
   const [chat, setChat] = useState([])
+  const [messageReceived, setMessageReceived] = useState(false)
   useEffect(() => {
     // if (!userInfo.isAdmin) {
-    // const sct = socket
-    //setSkt(sct)
+    var audio = new Audio('/audio/chat-msg.mp3')
     socket.on('server sends message from admin to client', (msg) => {
       setChat((chat) => {
         return [...chat, { admin: msg }]
       })
+      setMessageReceived(true)
+      audio.play()
       const chatMessages = document.querySelector('.cht-msg')
       chatMessages.scrollTop = chatMessages.scrollHeight
     })
@@ -26,6 +27,7 @@ const UserChatComponent = () => {
     if (e.keyCode && e.keyCode !== 13) {
       return
     }
+    setMessageReceived(false)
     const msg = document.getElementById('clientChatMsg')
     let v = msg.value.trim()
     if (v === '' || v === null || v === false || !v) {
@@ -48,7 +50,10 @@ const UserChatComponent = () => {
       <input type='checkbox' id='check' />
       <label className='chat-btn' htmlFor='check'>
         <FontAwesomeIcon icon={faCommentDots} className='text-[30px] comment' />
-        <span className='absolute top-0 right-[50%] -translate-y-[50%] p-2 bg-[#CD3049] border border-light rounded-full'></span>
+
+        {messageReceived && (
+          <span className='absolute top-0 right-[50%] -translate-y-[50%] p-2 bg-[#CD3049] border border-light rounded-full'></span>
+        )}
 
         <FontAwesomeIcon icon={faCircleXmark} className='text-[30px] close' />
       </label>

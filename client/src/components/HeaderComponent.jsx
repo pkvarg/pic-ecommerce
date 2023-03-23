@@ -18,24 +18,30 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
 
 import { socket } from './../../socket'
-import { setChatRooms, setSocket } from './../actions/chatActions'
+import {
+  setChatRooms,
+  setSocket,
+  setMessageReceived,
+} from './../actions/chatActions'
 
 const HeaderComponent = () => {
   const dispatch = useDispatch()
+  const { messageReceived } = useSelector((state) => state.adminChat)
 
-  // useEffect(() => {
-  //   //if (userInfo.isAdmin) {
-  //   console.log(socket)
-  //   socket.on('server sends message from client to admin', ({ message }) => {
-  //     dispatch(setSocket(socket))
-  //     console.log('hc')
-  //     //   let chatRooms = {
-  //     //     fddf54gfgfSocketID: [{ "client": "dsfdf" }, { "client": "dsfdf" }, { "admin": "dsfdf" }],
-  //     //   };
-  //     dispatch(setChatRooms('exampleUser', message))
-  //   })
-  //   //}
-  // }, [socket])
+  useEffect(() => {
+    var audio = new Audio('/audio/chat-msg.mp3')
+    socket.on('server sends message from client to admin', ({ message }) => {
+      //dispatch(setSocket(socket))
+      console.log('hc')
+      //   let chatRooms = {
+      //     fddf54gfgfSocketID: [{ "client": "dsfdf" }, { "client": "dsfdf" }, { "admin": "dsfdf" }],
+      //   };
+      dispatch(setChatRooms('exampleUser', message))
+      dispatch(setMessageReceived(true))
+      audio.play()
+    })
+    return () => socket.disconnect()
+  }, [])
 
   return (
     <Navbar collapseOnSelect expand='lg' bg='dark' variant='dark'>
@@ -46,7 +52,9 @@ const HeaderComponent = () => {
             <LinkContainer to='/admin'>
               <Nav.Link className='absolute right-8 top-2.5'>
                 Admin
-                <span className='absolute -translate-y-[50%] p-2 bg-[#cd3049] border border-light rounded-full'></span>
+                {messageReceived && (
+                  <span className='absolute -translate-y-[50%] p-2 bg-[#cd3049] border border-light rounded-full'></span>
+                )}
               </Nav.Link>
             </LinkContainer>
           </Nav>
