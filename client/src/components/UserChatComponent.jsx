@@ -10,6 +10,11 @@ const UserChatComponent = () => {
   useEffect(() => {
     // if (!userInfo.isAdmin) {
     var audio = new Audio('/audio/chat-msg.mp3')
+    socket.on('no admin', (msg) => {
+      setChat((chat) => {
+        return [...chat, { admin: 'No admin available at the moment.' }]
+      })
+    })
     socket.on('server sends message from admin to client', (msg) => {
       setChat((chat) => {
         return [...chat, { admin: msg }]
@@ -19,7 +24,7 @@ const UserChatComponent = () => {
       const chatMessages = document.querySelector('.cht-msg')
       chatMessages.scrollTop = chatMessages.scrollHeight
     })
-    //return () => sct.disconnect()
+    return () => socket.disconnect()
     //}
   }, [])
 
