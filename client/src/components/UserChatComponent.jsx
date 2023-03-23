@@ -24,7 +24,7 @@ const UserChatComponent = () => {
       const chatMessages = document.querySelector('.cht-msg')
       chatMessages.scrollTop = chatMessages.scrollHeight
     })
-    return () => socket.disconnect()
+    // return () => socket.disconnect()
     //}
   }, [])
 

@@ -10,22 +10,6 @@ const Admin = () => {
   const dispatch = useDispatch()
 
   const { chatRooms } = useSelector((state) => state.adminChat)
-  // console.log('s:', socket)
-
-  // from Header - not use Header
-  useEffect(() => {
-    //if (userInfo.isAdmin) {
-    //const sckt = socket
-    socket.on('server sends message from client to admin', ({ message }) => {
-      //dispatch(setSocket(socket))
-
-      //   let chatRooms = {
-      //     fddf54gfgfSocketID: [{ "client": "dsfdf" }, { "client": "dsfdf" }, { "admin": "dsfdf" }],
-      //   };
-      dispatch(setChatRooms('exampleUser', message))
-    })
-    //}
-  }, [])
 
   return (
     <div>

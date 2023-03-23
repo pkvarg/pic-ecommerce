@@ -32,22 +32,30 @@ const HeaderComponent = () => {
     // if userInfo.isAdmin
     var audio = new Audio('/audio/chat-msg.mp3')
 
+    // socket.emit(
+    //   'admin connected with server',
+    //   'Admin' + Math.floor(Math.random() * 1000000000000)
+    // )
+    // !!! stop multiple admins SOLVE WHEN REDUX IF ADMIN IS DONE
     socket.emit(
-      'admin connected with server',
-      'Admin' + Math.floor(Math.random() * 1000000000000)
+      'admin connected with server'
+      //'Admin' + Math.floor(Math.random() * 1000000000000)
     )
-    socket.on('server sends message from client to admin', ({ message }) => {
-      //dispatch(setSocket(socket))
-      console.log('hc')
-      //   let chatRooms = {
-      //     fddf54gfgfSocketID: [{ "client": "dsfdf" }, { "client": "dsfdf" }, { "admin": "dsfdf" }],
-      //   };
-      dispatch(setChatRooms('exampleUser', message))
-      dispatch(setMessageReceived(true))
+    socket.on(
+      'server sends message from client to admin',
+      ({ user, message }) => {
+        //dispatch(setSocket(socket))
+        console.log('hc:', user, message)
+        //   let chatRooms = {
+        //     fddf54gfgfSocketID: [{ "client": "dsfdf" }, { "client": "dsfdf" }, { "admin": "dsfdf" }],
+        //   };
+        dispatch(setChatRooms(user, message))
+        dispatch(setMessageReceived(true))
 
-      audio.play()
-    })
-    return () => socket.disconnect()
+        audio.play()
+      }
+    )
+    //return () => socket.disconnect()
   }, [])
 
   return (

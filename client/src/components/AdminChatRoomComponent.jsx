@@ -29,7 +29,9 @@ const AdminChatRoomComponent = ({
       return
     }
     chatRoom[1].push({ admin: msg.value })
+    console.log('socU, v:', socketUser, v)
     socket.emit('admin sends message', {
+      user: socketUser,
       message: v,
     })
     setRerender(!rerender)
