@@ -7,8 +7,12 @@ import { socket } from './../../socket'
 const UserChatComponent = () => {
   const [chat, setChat] = useState([])
   const [messageReceived, setMessageReceived] = useState(false)
+  const [chatConnectionInfo, setChatConnectionInfo] = useState(false)
+  const [reconnect, setReconnect] = useState(false)
+
   useEffect(() => {
     // if (!userInfo.isAdmin) {
+    setReconnect(false)
     var audio = new Audio('/audio/chat-msg.mp3')
     socket.on('no admin', (msg) => {
       setChat((chat) => {
@@ -24,14 +28,24 @@ const UserChatComponent = () => {
       const chatMessages = document.querySelector('.cht-msg')
       chatMessages.scrollTop = chatMessages.scrollHeight
     })
-    // return () => socket.disconnect()
+
+    socket.on('admin closed chat', () => {
+      setChat([])
+      setChatConnectionInfo(
+        'Admin closed chat. Type something and submit to reconnect'
+      )
+      setReconnect(true)
+    })
+
+    return () => socket.disconnect()
     //}
-  }, [])
+  }, [reconnect])
 
   const clientSubmitChatMsg = (e) => {
     if (e.keyCode && e.keyCode !== 13) {
       return
     }
+    setChatConnectionInfo('')
     setMessageReceived(false)
     const msg = document.getElementById('clientChatMsg')
     let v = msg.value.trim()
@@ -69,6 +83,7 @@ const UserChatComponent = () => {
         </div>
         <div className='chat-form'>
           <div className='cht-msg'>
+            <p>{chatConnectionInfo}</p>
             {chat.map((item, id) => (
               <div key={id}>
                 {item.client && (

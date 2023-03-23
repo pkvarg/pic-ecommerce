@@ -22,6 +22,7 @@ import {
   setChatRooms,
   setSocket,
   setMessageReceived,
+  removeChatRoom,
 } from './../actions/chatActions'
 
 const HeaderComponent = () => {
@@ -32,10 +33,6 @@ const HeaderComponent = () => {
     // if userInfo.isAdmin
     var audio = new Audio('/audio/chat-msg.mp3')
 
-    // socket.emit(
-    //   'admin connected with server',
-    //   'Admin' + Math.floor(Math.random() * 1000000000000)
-    // )
     // !!! stop multiple admins SOLVE WHEN REDUX IF ADMIN IS DONE
     socket.emit(
       'admin connected with server'
@@ -55,7 +52,11 @@ const HeaderComponent = () => {
         audio.play()
       }
     )
-    //return () => socket.disconnect()
+    socket.on('disconnected', ({ reason, socketId }) => {
+      //console.log(socketId, reason)
+      dispatch(removeChatRoom(socketId))
+    })
+    return () => socket.disconnect()
   }, [])
 
   return (
