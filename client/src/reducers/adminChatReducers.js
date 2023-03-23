@@ -26,7 +26,6 @@ export const adminChatReducer = (state = CHAT_INITIAL_STATE, action) => {
           },
         }
       }
-
     case actionTypes.SET_SOCKET:
       return {
         ...state,

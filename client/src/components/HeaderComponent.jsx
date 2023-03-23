@@ -25,7 +25,7 @@ const HeaderComponent = () => {
 
   // useEffect(() => {
   //   //if (userInfo.isAdmin) {
-  //   //const sckt = socket
+  //   console.log(socket)
   //   socket.on('server sends message from client to admin', ({ message }) => {
   //     dispatch(setSocket(socket))
   //     console.log('hc')
@@ -35,7 +35,7 @@ const HeaderComponent = () => {
   //     dispatch(setChatRooms('exampleUser', message))
   //   })
   //   //}
-  // }, [])
+  // }, [socket])
 
   return (
     <Navbar collapseOnSelect expand='lg' bg='dark' variant='dark'>
