@@ -99,19 +99,21 @@ const UserChatComponent = () => {
               </div>
             ))}
           </div>
-          <textarea
-            onKeyUp={(e) => clientSubmitChatMsg(e)}
-            id='clientChatMsg'
-            className='form-control'
-            placeholder='Your Text Message'
-          ></textarea>
+          <div className='flex flex-col'>
+            <textarea
+              onKeyUp={(e) => clientSubmitChatMsg(e)}
+              id='clientChatMsg'
+              className='form-control'
+              placeholder='Your Text Message'
+            ></textarea>
 
-          <button
-            onClick={(e) => clientSubmitChatMsg(e)}
-            className='btn btn-success btn-block'
-          >
-            Submit
-          </button>
+            <button
+              onClick={(e) => clientSubmitChatMsg(e)}
+              className='bg-[green] p-1 mt-1 text-[#fff] rounded-lg'
+            >
+              Submit
+            </button>
+          </div>
         </div>
       </div>
     </>

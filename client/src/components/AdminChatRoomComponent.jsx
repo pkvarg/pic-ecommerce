@@ -57,26 +57,26 @@ const AdminChatRoomComponent = ({
       <Toast
         show={'toast' + roomIndex}
         onClose={() => close(chatRoom[0])}
-        className='ms-4 mb-5'
+        className='ms-4 mb-5 ml-4 w-[100%]'
       >
-        <div onClick={() => close()} className='cursor-pointer'>
-          X
+        <div className='bg-[#0000FF] text-[#fff] flex justify-between items-center px-2 h-12 rounded-t-lg'>
+          <Toast.Header>
+            <strong className='me-auto '>Chat with User</strong>
+          </Toast.Header>
+          <div onClick={() => close()} className='cursor-pointer'>
+            X
+          </div>
         </div>
-        <Toast.Header>
-          <strong className='me-auto'>Chat with User</strong>
-        </Toast.Header>
         <Toast.Body>
           <div
-            className={`cht-msg${socketUser}`}
-            style={{ maxHeight: '500px', overflow: 'auto' }}
+            //className={`cht-msg${socketUser}`}
+            className='cht-msg '
+            //style={{ maxHeight: '500px', overflow: 'auto' }}
           >
             {chatRoom[1].map((msg, idx) => (
               <Fragment key={idx}>
                 {msg.client && (
-                  <p
-                    key={idx}
-                    className='bg-primary p-3 ms-4 text-light rounded-pill'
-                  >
+                  <p key={idx} className='m-1 ms-4 text-light rounded-pill'>
                     <b>User wrote:</b> {msg.client}
                   </p>
                 )}
@@ -89,20 +89,24 @@ const AdminChatRoomComponent = ({
             ))}
           </div>
 
-          <Form>
-            <Form.Group className='mb-3' controlId={`adminChatMsg${roomIndex}`}>
-              <Form.Label>Write a message</Form.Label>
+          <Form className='ml-1 mb-3'>
+            <Form.Group
+              className=' flex flex-col'
+              controlId={`adminChatMsg${roomIndex}`}
+            >
+              {/* <Form.Label>Write a message</Form.Label> */}
               <Form.Control
                 onKeyUp={(e) =>
                   adminSubmitChatMsg(e, `adminChatMsg${roomIndex}`)
                 }
                 as='textarea'
                 rows={2}
+                placeholder='Write a message'
               />
             </Form.Group>
             <Button
               onClick={(e) => adminSubmitChatMsg(e, `adminChatMsg${roomIndex}`)}
-              variant='success'
+              className='bg-[green] p-1 mt-1 text-[#fff] rounded-lg w-[100%]'
               type='submit'
             >
               Submit
